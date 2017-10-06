@@ -1,16 +1,9 @@
 package com.PuzzleProblem;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
-import com.SearchingModel.Action;
-import com.SearchingModel.FifoQueue;
 import com.SearchingModel.Node;
 import com.SearchingModel.Problem;
-import com.SearchingModel.State;
+import com.SearchingModel.SearchingAlgorythm;
+import com.SearchingModel.Solution;
 
 public class PuzzleSolver {
 
@@ -33,12 +26,13 @@ public class PuzzleSolver {
 		Problem p = new PuzzleProblem(table);
 		
 		System.out.println("Start problem:\n" + p.initialState.state.toString());
+		PuzzleSolution sol;
+		Solution s = SearchingAlgorythm.BreadthFirstSearch(p);
+		sol=(PuzzleSolution)s;
 		
-		Node f = BFSSolver(p);
-		
-		if (f != null) {
+		if (sol.get() != null) {
 			System.out.println("We found a solution! \n");
-			Visit(f);
+			Visit(sol.get());
 		} else {
 			System.out.println("We didn't find a solution!");
 		}
@@ -52,43 +46,5 @@ public class PuzzleSolver {
 			f = f.parent;
 		}
 		System.out.println("\nTotal moves:" + n + "\n");
-	}
-
-	public static Node BFSSolver(Problem problem) {
-		Node node = problem.initialState;
-		if (problem.GoalTest(node.state)) {
-			return node;
-		}
-		FifoQueue<Node> frontier = new FifoQueue<>();
-		frontier.put(node);
-		HashSet<State> explored = new HashSet<>();
-		while (!frontier.isEmpty()) {
-			node = frontier.pop();
-			explored.add(node.state);
-			if (node.pathCost > 31) {
-				continue;
-			}
-			Action[] acts = problem.Actions(node.state);
-			for (Action action : acts) {
-				Node child = problem.ChildNode(node, action);
-				if (!explored.contains(child.state) && !containsState(frontier, child.state)) {
-					if (problem.GoalTest(child.state)) {
-						return child;
-					}
-					frontier.put(child);
-					System.out.println("Frontier: " + frontier.size() + ", Explored: " + explored.size());
-				}
-			}
-		}
-		return null;
-	}
-
-	private static boolean containsState(FifoQueue<Node> frontier, State state) {
-		for (int i = 0; i < frontier.size(); i++) {
-			if (frontier.get(i).state.equals(state)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

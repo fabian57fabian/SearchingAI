@@ -72,7 +72,7 @@ public class PuzzleProblem extends Problem {
 	@Override
 	public Action[] Actions(State s) {
 		PuzzleState s1 = (PuzzleState) s;
-		List<Action> actions = new ArrayList();
+		List<Action> actions = new ArrayList<Action>();
 		int dimi = s1.matrix[0].length;
 		int dimj = s1.matrix.length;
 		if (s1.j0 - 1 >= 0) {
